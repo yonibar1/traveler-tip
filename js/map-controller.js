@@ -1,4 +1,6 @@
 import { mapService } from './services/map-service.js'
+import { locationService } from './services/location-service.js'
+
 
 var gMap;
 console.log('Main!');
@@ -40,8 +42,9 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
                 zoom: 15
             })
             gMap.addListener('click', (ev) => {
-                console.log(ev.latLng.lat());
-                console.log(ev.latLng.lng());
+                const pos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
+                locationService.setLocaion(pos)
+                    .then(renderLocsTable)
             });
             console.log('Map!', gMap);
         })
@@ -82,6 +85,19 @@ function _connectGoogleApi() {
         elGoogleApi.onload = resolve;
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
+}
+
+function renderLocsTable(locs) {
+    const elTable = document.querySelector('.location-table table')
+    let strHTMLs = locs.map(loc => {
+        console.log(loc);
+        return `<tr><td>${loc.id}</td>
+        <td>${loc.name}</td>
+        <td>${loc.weather}</td>
+        <td>${loc.createdAt}</td>
+        <td>${loc.updatedAt}</td><tr>`
+    })
+    elTable.innerHTML = strHTMLs.join('')
 }
 
 
