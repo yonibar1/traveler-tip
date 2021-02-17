@@ -7,10 +7,9 @@ export const locationService = {
 };
 import { storageServices } from './storage-services.js';
 // LOC {id, name, lat, lng, weather, createdAt, updatedAt}
-function setLocaion(pos, weather) {
+function setLocaion(pos, weather, name) {
   const locs = storageServices.loadFromStorage(KEY) || [];
   let id = gNextId++;
-  let name = 'my location';
   let createdAt = moment().calendar();
   let updatedAt = 'Not Yet';
   const loc = {
@@ -27,6 +26,7 @@ function setLocaion(pos, weather) {
   storageServices.saveToStorage('id', gNextId);
   return Promise.resolve(locs);
 }
+
 function deleteFromLocalStorage(value) {
   const data = storageServices.loadFromStorage(KEY);
   const valueToRemove = value;

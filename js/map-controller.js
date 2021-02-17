@@ -22,6 +22,13 @@ window.onload = () => {
     .catch((err) => {
       console.log('err!!!', err);
     });
+  document.querySelector(`.my-location`).addEventListener('click', (ev) => {
+    getPermission().then((res) => {
+      return res
+    }).then(res => setTimeout(() => {
+        panTo(res[0],res[1])
+    }, 300))
+ });
 };
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
@@ -33,9 +40,11 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
       zoom: 15,
     });
     gMap.addListener('click', (ev) => {
-      const pos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() };
-      weatherService.getOpenWeather(pos).then((res) => {
-        locationService.setLocaion(pos, res).then(renderLocsTable);
+      inputNameLocation().then((name) => {
+        const pos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() };
+        weatherService.getOpenWeather(pos).then((res) => {
+          locationService.setLocaion(pos, res, name).then(renderLocsTable);
+        });
       });
     });
     console.log('Map!', gMap);
@@ -101,4 +110,31 @@ function renderLocsTable(locs) {
       locationService.deleteFromLocalStorage(loc.id).then(renderLocsTable);
     });
   });
+}
+
+function inputNameLocation() {
+  const prmUserDecision = Swal.fire({
+    title: 'Location name',
+    showDenyButton: true,
+    input: 'text',
+  }).then(({ value }) => {
+    if (!value) throw new Error('User Canceled!');
+    return value;
+  });
+  return prmUserDecision;
+}
+
+function getPermission() {
+  let locations = [];
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      locations.push(position.coords.latitude);
+      locations.push(position.coords.longitude);
+      if (!locations) getPermission();
+    },
+    function (error) {
+      Promise.reject(console.log('The Locator was denied. :('));
+    }
+  );
+  return Promise.resolve(locations);
 }
