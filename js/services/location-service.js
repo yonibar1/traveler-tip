@@ -6,10 +6,10 @@ export const locationService = {
 }
 import { storageServices } from './storage-services.js';
 // LOC {id, name, lat, lng, weather, createdAt, updatedAt}
-function setLocaion(pos, weather) {
+function setLocaion(pos, weather, name) {
     const locs = storageServices.loadFromStorage(KEY) || []
     let id = gNextId++
-    let name = 'my location'
+    // let name = 'my location'
     let createdAt = moment().calendar();
     let updatedAt = 'Not Yet'
     const loc = {

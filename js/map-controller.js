@@ -43,11 +43,14 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
                 zoom: 15
             })
             gMap.addListener('click', (ev) => {
-                const pos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
-                weatherService.getOpenWeather(pos)
-                    .then(res => {
-                        locationService.setLocaion(pos, res)
-                            .then(renderLocsTable)
+                inputNameLocation()
+                    .then(name => {
+                        const pos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
+                        weatherService.getOpenWeather(pos)
+                            .then(res => {
+                                locationService.setLocaion(pos, res, name)
+                                    .then(renderLocsTable)
+                            })
                     })
             });
             console.log('Map!', gMap);
@@ -111,26 +114,17 @@ function renderLocsTable(locs) {
     })
 }
 
+function inputNameLocation() {
+    const prmUserDecision = Swal.fire({
+        title: 'Location name',
+        showDenyButton: true,
+        input: 'text',
 
-
-// function inputNameLocation(){
-//     const ipAPI = '//api.ipify.org?format=json'
-
-//     const inputValue = fetch(ipAPI)
-//       .then(response => response.json())
-//       .then(data => data.ip)
-
-//     const { value: locationName } = Swal.fire({
-//       title: 'Enter your location name',
-//       input: 'text',
-//       inputLabel: 'Your location name',
-//       inputValue: inputValue,
-//       showCancelButton: true,
-//       inputValidator: (value) => {
-//         if (!value) {
-//           return 'You need to write something!'
-//         }
-//       }
-//     })
-// }
+    })
+        .then(({ value }) => {
+            if (!value) throw new Error('User Canceled!')
+            return value
+        })
+    return prmUserDecision
+}
 
