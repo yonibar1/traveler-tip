@@ -9,12 +9,11 @@ import { storageServices } from './storage-services.js';
 function setLocaion(pos, weather) {
     let id = 1
     let name = 'my location'
-    let createdAt = Date.now()
-    let updatedAt = Date.now() + 10000
+    let createdAt = moment().calendar();
+    let updatedAt = 'Not Yet'
     const loc = {
         id, name, pos, weather, createdAt, updatedAt
     }
-    // console.log(loc, "LOC");
     locs.push(loc)
     storageServices.saveToStorage(KEY, locs)
     return Promise.resolve(locs)
