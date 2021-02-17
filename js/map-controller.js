@@ -1,5 +1,6 @@
 import { mapService } from './services/map-service.js'
 import { locationService } from './services/location-service.js'
+import { weatherService } from './services/weather-services.js'
 
 
 var gMap;
@@ -43,8 +44,10 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
             })
             gMap.addListener('click', (ev) => {
                 const pos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
-                locationService.setLocaion(pos)
-                    .then(renderLocsTable)
+                weatherService.getOpenWeather(pos)
+                    .then(res => locationService.setLocaion(pos, res)
+                        .then(renderLocsTable))
+
             });
             console.log('Map!', gMap);
         })
@@ -88,7 +91,7 @@ function _connectGoogleApi() {
 }
 
 function renderLocsTable(locs) {
-    const elTable = document.querySelector('.location-table table')
+    const elTable = document.querySelector('.location-table table tbody')
     let strHTMLs = locs.map(loc => {
         console.log(loc);
         return `<tr><td>${loc.id}</td>
