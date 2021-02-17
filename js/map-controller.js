@@ -45,8 +45,11 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
             gMap.addListener('click', (ev) => {
                 const pos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 weatherService.getOpenWeather(pos)
-                    .then(res => locationService.setLocaion(pos, res)
-                        .then(renderLocsTable))
+                    .then(res => {
+                        locationService.setLocaion(pos, res)
+                        .then(renderLocsTable)
+                    })
+                
 
             });
             console.log('Map!', gMap);
@@ -103,5 +106,24 @@ function renderLocsTable(locs) {
     elTable.innerHTML = strHTMLs.join('')
 }
 
+// function inputNameLocation(){
+//     const ipAPI = '//api.ipify.org?format=json'
 
+//     const inputValue = fetch(ipAPI)
+//       .then(response => response.json())
+//       .then(data => data.ip)
+    
+//     const { value: locationName } = Swal.fire({
+//       title: 'Enter your location name',
+//       input: 'text',
+//       inputLabel: 'Your location name',
+//       inputValue: inputValue,
+//       showCancelButton: true,
+//       inputValidator: (value) => {
+//         if (!value) {
+//           return 'You need to write something!'
+//         }
+//       }
+//     })
+// }
 
