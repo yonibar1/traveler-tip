@@ -8,6 +8,6 @@ function getOpenWeather(pos = { lat: 3, lon: 3 }) {
   return axios
     .get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&APPID=${KEY_API_WEATHER}`)
     .then((res) => {
-      return Math.round(res.data.main.temp / 17);
+      return (res.data.main.temp / 17);
     });
 }
