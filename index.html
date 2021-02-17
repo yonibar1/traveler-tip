@@ -5,12 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ES6</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <h1>ES6</h1>
-    <div id="map" style="width: 100%; height: 400px;"></div>
-    <button class="btn">Click Me</button>
+    <nav class="nav-bar">
+        <div class="logo">Logo</div>
+        <div class="nav-button">
+            <form class="form-nav">
+                <input class="input-location" type="text"></input>
+                <button>Go</button>
+            </form>
+            <button>My Location</button>
+        </div>
+    </nav>
+    <div class="top-main-container">
+        <h1>Location: <span class="location-city">Central Park, New York</span></h1>
+        <button class="copy-location">Copy Location</button>
+    </div>
+    <div class="main-container">
+        <aside>
+            <div class="weather"></div>
+            <div class="location-table"></div>
+        </aside>
+        <div id="map" style="width: 50%; height: 400px;"></div>
+        <!-- Need To Check!!  -->
+        <button class="btn">Click Me</button>
+    </div>
 
     <script type="module" src="js/map-controller.js"></script>
 </body>
