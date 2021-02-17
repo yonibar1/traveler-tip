@@ -8,10 +8,10 @@ mapService.getLocs()
 
 window.onload = () => {
 
-    document.querySelector('.btn').addEventListener('click', (ev) => {
-        console.log('Aha!', ev.target);
-        panTo(35.6895, 139.6917);
-    })
+    // document.querySelector('.btn').addEventListener('click', (ev) => {
+    //     console.log('Aha!', ev.target);
+    //     panTo(35.6895, 139.6917);
+    // })
 
     initMap()
         .then(() => {
@@ -29,6 +29,7 @@ window.onload = () => {
 }
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
+
     console.log('InitMap');
     return _connectGoogleApi()
         .then(() => {
@@ -38,6 +39,10 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
                 center: { lat, lng },
                 zoom: 15
             })
+            gMap.addListener('click', (ev) => {
+                console.log(ev.latLng.lat());
+                console.log(ev.latLng.lng());
+            });
             console.log('Map!', gMap);
         })
 }
@@ -67,7 +72,7 @@ function getPosition() {
 
 function _connectGoogleApi() {
     if (window.google) return Promise.resolve()
-    const API_KEY = 'AIzaSyARLjLvyMPGRPBTjpwqu92ZjyJBX7sjmFk'; //TODO: Enter your API Key
+    const API_KEY = 'AIzaSyARLjLvyMPGRPBTjpwqu92ZjyJBX7sjmFk';
     var elGoogleApi = document.createElement('script');
     elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
     elGoogleApi.async = true;
