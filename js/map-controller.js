@@ -4,6 +4,8 @@ import { weatherService } from './services/weather-services.js'
 
 
 var gMap;
+
+
 console.log('Main!');
 
 mapService.getLocs()
@@ -11,10 +13,6 @@ mapService.getLocs()
 
 window.onload = () => {
 
-    // document.querySelector('.btn').addEventListener('click', (ev) => {
-    //     console.log('Aha!', ev.target);
-    //     panTo(35.6895, 139.6917);
-    // })
 
     initMap()
         .then(() => {
@@ -29,6 +27,8 @@ window.onload = () => {
         .catch(err => {
             console.log('err!!!', err);
         })
+
+
 }
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
@@ -47,10 +47,8 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
                 weatherService.getOpenWeather(pos)
                     .then(res => {
                         locationService.setLocaion(pos, res)
-                        .then(renderLocsTable)
+                            .then(renderLocsTable)
                     })
-                
-
             });
             console.log('Map!', gMap);
         })
@@ -92,19 +90,28 @@ function _connectGoogleApi() {
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
 }
-
 function renderLocsTable(locs) {
     const elTable = document.querySelector('.location-table table tbody')
     let strHTMLs = locs.map(loc => {
-        console.log(loc);
         return `<tr><td>${loc.id}</td>
         <td>${loc.name}</td>
         <td>${loc.weather}</td>
         <td>${loc.createdAt}</td>
-        <td>${loc.updatedAt}</td><tr>`
+        <td>${loc.updatedAt}</td>
+        <td><button class="go-btn-${loc.id}">Go</button></td>
+        <td><button class="delete-btn">Delete</button></td>
+        <tr>`
     })
     elTable.innerHTML = strHTMLs.join('')
+
+    locs.forEach(loc => {
+        document.querySelector(`.go-btn-${loc.id}`).addEventListener('click', (ev) => {
+            panTo(loc.pos.lat, loc.pos.lng);
+        })
+    })
 }
+
+
 
 // function inputNameLocation(){
 //     const ipAPI = '//api.ipify.org?format=json'
@@ -112,7 +119,7 @@ function renderLocsTable(locs) {
 //     const inputValue = fetch(ipAPI)
 //       .then(response => response.json())
 //       .then(data => data.ip)
-    
+
 //     const { value: locationName } = Swal.fire({
 //       title: 'Enter your location name',
 //       input: 'text',

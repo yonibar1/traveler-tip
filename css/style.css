@@ -65,6 +65,7 @@ aside{
   align-self:flex-end ;
   height: 50%;
   width: 100%;
+  text-align: center;
 }
 .map-container{
   width: 50%;
